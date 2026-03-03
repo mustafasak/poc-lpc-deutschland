@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { img } from "@/lib/images";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -26,46 +27,27 @@ export default function Header() {
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           {/* Mobile menu button */}
           <button
-            className="md:hidden text-teal-dark"
+            className="md:hidden"
             onClick={() => setMenuOpen(!menuOpen)}
           >
-            <svg
-              className="w-7 h-7"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              {menuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={img.menuBurger} alt="Menu" className="w-7 h-7" />
           </button>
 
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
-            <div className="flex flex-col items-center">
-              <span className="text-teal font-[800] text-xl md:text-2xl leading-tight tracking-tight">
-                LES PETITS
-              </span>
-              <span className="text-teal font-[800] text-xl md:text-2xl leading-tight tracking-tight">
-                CULOTTES
-              </span>
-              <span className="text-teal-dark text-[9px] tracking-[0.2em] font-medium mt-0.5">
-                DEUTSCHLAND
-              </span>
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={img.logo}
+              alt="Les Petits Culottes"
+              className="h-12 md:h-16 hidden md:block"
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={img.logoMobile}
+              alt="Les Petits Culottes"
+              className="h-10 md:hidden"
+            />
           </Link>
 
           {/* Desktop nav */}
@@ -73,60 +55,38 @@ export default function Header() {
             <Link href="/" className="hover:text-teal transition-colors">
               Startseite
             </Link>
-            <Link href="/abo" className="hover:text-teal transition-colors">
+            <Link href="/abo" className="hover:text-teal transition-colors flex items-center gap-1">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={img.coucheBio} alt="" className="w-5 h-5" />
               Windeln
             </Link>
-            <span className="text-grey-text cursor-default">
+            <span className="text-grey-text cursor-default flex items-center gap-1">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={img.laitBox} alt="" className="w-5 h-5 opacity-50" />
               Bio-Milch
             </span>
             <Link href="/" className="hover:text-teal transition-colors">
               Qualitat
             </Link>
-            <Link href="/" className="hover:text-teal transition-colors">
-              Unsere Geschichte
-            </Link>
             <Link
               href="/abo"
-              className="bg-lime text-white text-xs font-bold px-4 py-2 rounded-full hover:bg-lime-dark transition-colors uppercase tracking-wide"
+              className="bg-lime text-white text-xs font-bold px-4 py-2 rounded-full hover:bg-lime-dark transition-colors uppercase tracking-wide flex items-center gap-1"
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={img.colis} alt="" className="w-4 h-4 brightness-0 invert" />
               Testpaket
             </Link>
           </nav>
 
           {/* Right icons */}
-          <div className="flex items-center gap-3">
-            <Link
-              href="/mein-konto"
-              className="text-teal hover:text-teal-dark transition-colors"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-                />
-              </svg>
+          <div className="flex items-center gap-4">
+            <Link href="/mein-konto" className="hover:opacity-70 transition-opacity">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={img.user} alt="Mein Konto" className="w-6 h-6" />
             </Link>
-            <button className="text-teal hover:text-teal-dark transition-colors relative">
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
-                />
-              </svg>
+            <button className="relative hover:opacity-70 transition-opacity">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={img.cart} alt="Warenkorb" className="w-6 h-6" />
               <span className="absolute -top-1 -right-1 bg-coral text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
                 0
               </span>
@@ -137,25 +97,13 @@ export default function Header() {
         {/* Mobile menu */}
         {menuOpen && (
           <div className="md:hidden border-t border-grey-border bg-white px-4 py-4 space-y-3">
-            <Link
-              href="/"
-              className="block text-gray-800 font-medium py-2"
-              onClick={() => setMenuOpen(false)}
-            >
+            <Link href="/" className="block text-gray-800 font-medium py-2" onClick={() => setMenuOpen(false)}>
               Startseite
             </Link>
-            <Link
-              href="/abo"
-              className="block text-gray-800 font-medium py-2"
-              onClick={() => setMenuOpen(false)}
-            >
+            <Link href="/abo" className="block text-gray-800 font-medium py-2" onClick={() => setMenuOpen(false)}>
               Windeln im Abo
             </Link>
-            <Link
-              href="/mein-konto"
-              className="block text-gray-800 font-medium py-2"
-              onClick={() => setMenuOpen(false)}
-            >
+            <Link href="/mein-konto" className="block text-gray-800 font-medium py-2" onClick={() => setMenuOpen(false)}>
               Mein Konto
             </Link>
             <Link
