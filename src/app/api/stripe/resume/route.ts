@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
     const { subscriptionId } = await req.json();
 
     const subscription = await stripe.subscriptions.update(subscriptionId, {
-      pause_collection: "",
+      pause_collection: null,
     });
 
     return NextResponse.json({ status: subscription.status, paused: false });
