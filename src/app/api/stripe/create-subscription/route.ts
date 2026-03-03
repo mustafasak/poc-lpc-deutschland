@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 
-// Product prices for each size (in cents)
 const PRICE_AMOUNT = 4900; // 49.00 EUR
+const PAYMENT_METHOD_CONFIG = "pmc_1RKHubRo6ty8dxzTNW0IF7bw";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { email, name, paymentMethod, sizeId, subType } = body;
+    const { email, name, sizeId, subType } = body;
 
     // Create or retrieve customer
     const customers = await stripe.customers.list({ email, limit: 1 });
@@ -36,14 +35,6 @@ export async function POST(req: NextRequest) {
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-    type PMType = Stripe.Checkout.SessionCreateParams.PaymentMethodType;
-
-    const pmTypes: PMType[] = paymentMethod === "sepa"
-      ? ["sepa_debit", "card"]
-      : paymentMethod === "card"
-        ? ["card"]
-        : ["card", "sepa_debit"];
-
     const session = await stripe.checkout.sessions.create({
       customer: customer.id,
       mode: "subscription",
@@ -54,7 +45,7 @@ export async function POST(req: NextRequest) {
         metadata: { sizeId, subType, market: "DE" },
       },
       locale: "de",
-      payment_method_types: pmTypes,
+      payment_method_configuration: PAYMENT_METHOD_CONFIG,
     });
 
     return NextResponse.json({ url: session.url, sessionId: session.id });
