@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 
 // Product prices for each size (in cents)
@@ -33,36 +34,27 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    if (paymentMethod === "sepa") {
-      // Create a Checkout Session with SEPA Direct Debit
-      const session = await stripe.checkout.sessions.create({
-        customer: customer.id,
-        payment_method_types: ["sepa_debit"],
-        mode: "subscription",
-        line_items: [{ price: price.id, quantity: 1 }],
-        success_url: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/mein-konto?session_id={CHECKOUT_SESSION_ID}&success=true`,
-        cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/kasse?type=${subType}&size=${sizeId}&canceled=true`,
-        subscription_data: {
-          metadata: { sizeId, subType, market: "DE" },
-        },
-        locale: "de",
-      });
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-      return NextResponse.json({ url: session.url, sessionId: session.id });
-    }
+    type PMType = Stripe.Checkout.SessionCreateParams.PaymentMethodType;
 
-    // For card/PayPal/Klarna — use Checkout Session with automatic payment methods
+    const pmTypes: PMType[] = paymentMethod === "sepa"
+      ? ["sepa_debit", "card"]
+      : paymentMethod === "card"
+        ? ["card"]
+        : ["card", "sepa_debit"];
+
     const session = await stripe.checkout.sessions.create({
       customer: customer.id,
       mode: "subscription",
       line_items: [{ price: price.id, quantity: 1 }],
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/mein-konto?session_id={CHECKOUT_SESSION_ID}&success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/kasse?type=${subType}&size=${sizeId}&canceled=true`,
+      success_url: `${baseUrl}/mein-konto?session_id={CHECKOUT_SESSION_ID}&success=true`,
+      cancel_url: `${baseUrl}/kasse?type=${subType}&size=${sizeId}&canceled=true`,
       subscription_data: {
         metadata: { sizeId, subType, market: "DE" },
       },
       locale: "de",
-      ...(paymentMethod === "card" && { payment_method_types: ["card"] }),
+      payment_method_types: pmTypes,
     });
 
     return NextResponse.json({ url: session.url, sessionId: session.id });
